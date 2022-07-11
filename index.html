@@ -1,65 +1,66 @@
 <!DOCTYPE html>
 <html>
    <head>
+      <title>New</title>
       <link rel="stylesheet" href="css/style.css">
-      <link rel="icon" href="images/main.jpg" >
-      <title>An interpreter for Refal</title>
    </head>
    <body>
-      <h1>An interpreter for Refal</h1>
+      <h1>Refal interpreter (it is better to open it on PC)</h1>
+      <button style= "margin-left:3px"> <
+      </button>
+      <label for="">Choose a lesson:</label>
+      <select id="">
+         <option value=""></option>
+         <option value="">Lesson 1</option>
+         <option value="">Lesson 2</option>
+         <option value="">Lesson 3</option>
+         <option value="">Lesson 4</option>
+      </select>
+      <button style= "margin-right:30px" >></button>
+      <button style= "margin-left:40px"><  
+      </button>
+      <label for="">Choose an example:</label>
+      <select id="">
+         <option value=""></option>
+         <option value="">Example 1 </option>
+         <option value="">Example 2</option>
+         <option value="">Example 3</option>
+         <option value="">Example 4</option>
+      </select>
+      <button >></button>
       <br>
       <br>
-      <div>
-      <textarea  id="expression"  rows="4" cols="50"></textarea>
-      <br>
-      <br>
-      <input id="btn" type="button" value="Run" onclick="petros(); evaluateArithmeticExpression();"/>
-      <input id="btn1" type="button" value="Stop" onclick="javascript:eraseText();"/>
-<input type="file" name="inputfile" id="myFile">
-
-      <br>
-      <br>
-      <textarea  id="result"  rows="4" cols="50"></textarea>
-<br>
-         <input type="text" name="title" id="title" value="" placeholder="for example file.ref ">
-<input type="button" id="dwn-btn"  value="Download source code"/>
+      <div class="row" style="
+         height: 425px;">
+         
+         <div class="col">
+            <textarea id="t1" placeholder="here goes program code (program field)" style="
+               width: 300px;
+               height: 200px;
+               margin-right: 10px;">
+               </textarea>
+            <br>
+            <textarea id="t2" placeholder="detailed program field" style="
+               width: 300px;
+               height: 200px;">
+               </textarea>
+            <br>
+         </div>
+         <div class="col">
+            <textarea id="ta3" placeholder="vision field" style="
+               width: 300px;
+               height: 200px;">
+               </textarea>
+            <br>
+            <textarea id="t4" placeholder="result field" style="
+               width: 300px;
+               height: 200px;">
+               </textarea>
+            <br>
+         </div>
       </div>
-    <script type="text/javascript">
-      function evaluateArithmeticExpression() {
-        //debugger;
-        var expression = document.getElementById("expression").value;
-        var result = "";
-        if (expression === null || expression.length < 1) {
-          result = "Empty expression";
-        }
-        result = parserArithmeticSimpleModule.parseArithmeticExpression(
-          expression
-        );
-        document.getElementById("result").innerText = result.toString();
-      }
-    </script>
-<script>function download(filename, text) {
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    element.setAttribute('download', filename);
-
-    element.style.display = 'none';
-    document.body.appendChild(element);
-
-    element.click();
-
-    document.body.removeChild(element);
-}
-
-// Start file download.
-document.getElementById("dwn-btn").addEventListener("click", function(){
-    // Generate download of hello.txt file with some content
-    var text = document.getElementById("expression").value;
-   var text1 = document.getElementById("title").value;
-    var filename = text1 ;
-    
-    download(filename, text);
-}, false);</script>
-      <script type="text/javascript" src="js/script.js"></script>
+      <br>
+      <button style="margin-left:3px">Run</button>
+      <script> </script>
    </body>
 </html>
