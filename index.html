@@ -6,61 +6,56 @@
    </head>
    <body>
       <h1>Refal interpreter (it is better to open it on PC)</h1>
-      <button style= "margin-left:3px"> <
+      <button style= "margin-left:3px" onClick="textchange2()"> <<<
       </button>
-      <label for="">Choose a lesson:</label>
-      <select id="">
+      <label for="">Choose the lesson:</label>
+      <select id="new">
          <option value=""></option>
-         <option value="">Lesson 1</option>
-         <option value="">Lesson 2</option>
-         <option value="">Lesson 3</option>
-         <option value="">Lesson 4</option>
+         <option value="Lesson 1">Lesson 1</option>
+         <option value="Lesson 2">Lesson 2</option>
+         <option value="Lesson 3">Lesson 3</option>
+         <option value="Lesson 4">Lesson 4</option>
       </select>
-      <button style= "margin-right:30px" >></button>
-      <button style= "margin-left:40px"><  
+      <button style= "margin-right:25px" onClick="textchange()">>>>  </button>
+      <button style= "margin-left:2px" onClick="textchange4()"><<<   
       </button>
       <label for="">Choose an example:</label>
-      <select id="">
+      <select id="new1">
          <option value=""></option>
-         <option value="">Example 1 </option>
-         <option value="">Example 2</option>
-         <option value="">Example 3</option>
-         <option value="">Example 4</option>
+         <option value="Example 1">Example 1 </option>
+         <option value="Example 2">Example 2</option>
+         <option value="Example 3">Example 3</option>
+         <option value="Example 4">Example 4</option>
       </select>
-      <button >></button>
+      <button onClick="textchange3()"> >>> </button>
       <br>
       <br>
       <div class="row" style="
          height: 425px;">
-         
          <div class="col">
             <textarea id="t1" placeholder="here goes program code (program field)" style="
                width: 300px;
                height: 200px;
-               margin-right: 10px;">
-               </textarea>
+               margin-right: 10px;"></textarea>
             <br>
             <textarea id="t2" placeholder="detailed program field" style="
                width: 300px;
-               height: 200px;">
-               </textarea>
+               height: 200px;"></textarea>
             <br>
          </div>
          <div class="col">
             <textarea id="ta3" placeholder="vision field" style="
                width: 300px;
-               height: 200px;">
-               </textarea>
+               height: 200px;"></textarea>
             <br>
             <textarea id="t4" placeholder="result field" style="
                width: 300px;
-               height: 200px;">
-               </textarea>
+               height: 200px;"></textarea>
             <br>
          </div>
       </div>
       <br>
       <button style="margin-left:3px">Run</button>
-      <script> </script>
+      <script src="js/javascript.js"></script>
    </body>
 </html>
