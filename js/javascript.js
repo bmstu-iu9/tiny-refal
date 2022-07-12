@@ -61,3 +61,12 @@ function textchange4() {
    }
 
 }
+
+function myFunction(){
+
+if((document.getElementById("new").value == "Lesson 1") && (document.getElementById("new1").value == "Example 1")){
+
+if ((document.getElementById("t1").value=="h") && (document.getElementById("t3").value=="a")){document.getElementById("t4").value="j";}
+   
+   }
+}
