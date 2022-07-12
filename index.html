@@ -55,7 +55,21 @@
          </div>
       </div>
       <br>
-      <button style="margin-left:3px" onClick="myFunction()">Run</button>
+      <button style="margin-left:3px" onClick="myFunction(); evaluateArithmeticExpression();">Run</button>
       <script src="js/javascript.js"></script>
+    <script type="text/javascript">
+      function evaluateArithmeticExpression() {
+        //debugger;
+        var expression = document.getElementById("t3").value;
+        var result = "";
+        if (expression === null || expression.length < 1) {
+          result = "Empty expression";
+        }
+        result = parserArithmeticSimpleModule.parseArithmeticExpression(
+          expression
+        );
+        document.getElementById("t4").innerText = result.toString();
+      }
+    </script>
    </body>
 </html>
