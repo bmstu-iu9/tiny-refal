@@ -4,39 +4,18 @@
       <title>New</title>
       <link rel="stylesheet" href="css/style.css">
    </head>
-   <body>
+<body>
       <h1>Refal interpreter (it is better to open it on PC)</h1>
-      <button style= "margin-left:3px" onClick="textchange2()"> <<<
-      </button>
-      <label for="">Choose the lesson:</label>
-      <select id="new">
-         <option value=""></option>
-         <option value="Lesson 1">Lesson 1</option>
-         <option value="Lesson 2">Lesson 2</option>
-         <option value="Lesson 3">Lesson 3</option>
-         <option value="Lesson 4">Lesson 4</option>
-      </select>
-      <button style= "margin-right:25px" onClick="textchange()">>>>  </button>
-      <button style= "margin-left:2px" onClick="textchange4()"><<<   
-      </button>
-      <label for="">Choose an example:</label>
-      <select id="new1">
-         <option value=""></option>
-         <option value="Example 1">Example 1 </option>
-         <option value="Example 2">Example 2</option>
-         <option value="Example 3">Example 3</option>
-         <option value="Example 4">Example 4</option>
-      </select>
-      <button onClick="textchange3()"> >>> </button>
-      <br>
-      <br>
+
+      
+      
       <div class="row" style="
          height: 425px;">
          <div class="col">
             <textarea id="t1" placeholder="here goes program code (program field)" style="
                width: 300px;
                height: 200px;
-               margin-right: 10px;"></textarea>
+               margin-right: 10px;" onblur="this.value=removeSpaces(this.value);"></textarea>
             <br>
             <textarea id="t2" placeholder="detailed program field" style="
                width: 300px;
@@ -55,7 +34,31 @@
          </div>
       </div>
       <br>
-      <button style="margin-left:3px" onClick="myFunction(); evaluateArithmeticExpression();">Run</button>
+      <button style="margin-left:3px" onclick="textchange2()"> &lt;&lt;&lt;
+      </button>
+      <label for="">Choose the lesson:</label>
+      <select id="new">
+         <option value=""></option>
+         <option value="Lesson 1">Lesson 1</option>
+         <option value="Lesson 2">Lesson 2</option>
+         <option value="Lesson 3">Lesson 3</option>
+         <option value="Lesson 4">Lesson 4</option>
+      </select>
+      <button style="margin-right:25px" onclick="textchange()">&gt;&gt;&gt;  </button>
+      <button style="margin-left:2px" onclick="textchange4()">&lt;&lt;&lt;   
+      </button>
+      <label for="">Choose an example:</label>
+      <select id="new1">
+         <option value=""></option>
+         <option value="Example 1">Example 1 </option>
+         <option value="Example 2">Example 2</option>
+         <option value="Example 3">Example 3</option>
+         <option value="Example 4">Example 4</option>
+      </select>
+      <button onclick="textchange3()"> &gt;&gt;&gt; </button>
+<br>
+      <br><button style="margin-left:3px" onclick="myFunction(); evaluateArithmeticExpression();valodik();someFunction();">Run</button>
+<button onclick="textchange5()"> Load the lesson and the example </button>
       <script src="js/javascript.js"></script>
     <script type="text/javascript">
       function evaluateArithmeticExpression() {
@@ -71,5 +74,6 @@
         document.getElementById("t4").innerText = result.toString();
       }
     </script>
-   </body>
+   
+</body>
 </html>

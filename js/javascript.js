@@ -166,3 +166,27 @@ var parserArithmeticSimpleModule = (function() {
     parseArithmeticExpression: parse
   };
 })();
+
+
+function valodik(){
+if (document.getElementById("t1").value.includes(document.getElementById("t3").value)) { 
+  document.getElementById("t4").value= "0";
+}}
+
+
+
+
+
+function removeSpaces(string) {
+ return string.split(' ').join('');
+}
+
+function textchange5() {
+
+if (document.getElementById("new").value == "Lesson 1" && document.getElementById("new1").value == "Example 1") {
+      document.getElementById("t1").value = "programa";
+      document.getElementById("t3").value = "zrenie";
+   } 
+
+}
+window.onload = textchange5;
