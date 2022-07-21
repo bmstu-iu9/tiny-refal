@@ -58,125 +58,44 @@ function textchange4() {
    }
 }
 
-function myFunction(){
+function eraseText() {
 
-      if((document.getElementById("new").value == "Lesson 1") && (document.getElementById("new1").value == "Example 1")){
 
-            if ((document.getElementById("t1").value=="h") && (document.getElementById("t3").value=="a")){document.getElementById("t4").value="j";
-      }   
+   document.getElementById("t2").value = "";
+
+   document.getElementById("t4").value = "";
+}
+
+function validateText() {
+   const text = document.getElementById('t1').value;
+   if ((text.match(/=/g)?.length || 0) < 2) {
+      val();
+
+   } else {
+      document.getElementById('t4').value = "Invalid";
    }
 }
 
-var parserArithmeticSimpleModule = (function() {
-  splitByParenthesesBlocks = function(expression, operator) {
-    var result = [];
-    var braces = 0;
-    var currentChunk = "";
+function val() {
+   var someString = document.getElementById("t1").value;
+   var index = someString.indexOf("="); // Gets the first index where a space occours
+   var id = someString.substr(0, index); // Gets the first part
+   var text = someString.substr(index + 1); // Gets the text part
 
-    for (var i = 0; i < expression.length; i++) {
-      var currentChar = expression[i];
-      if (currentChar === "<") {
-        braces++;
-      } else if (currentChar === ">") {
-        braces--;
+
+   var p = document.getElementById("t3").value;
+
+
+   for (var i = 1; i <= id.length; i = i + 2) {
+      for (var j = 1; j <= text.length; j = j + 2) {
+         if (id[i] == text[j]) {
+            for (var k = 1; k <= p.length; k++) {
+               if (p[j - k] != undefined && (j - k) < k && (j - k) >= 0 && k <= (j / 2 + 0.5)) {
+
+                  document.getElementById("t4").value = document.getElementById("t4").value + p[j - k];
+               }
+            }
+         }
       }
-      if (braces == 0 && currentChar == operator) {
-        result.push(currentChunk);
-        currentChunk = "";
-      } else {
-        currentChunk += currentChar;
-      }
-    }
-    if (currentChunk !== "") {
-      result.push(currentChunk);
-    }
-    //console.log("Result of splitByParenthesesBlocks: " + result);
-    return result;
-  };
-
-  parseMultiplicationSeparatedExpression = function(expression) {
-    var numbersString = splitByParenthesesBlocks(expression, "*");
-    var numbers = numbersString.map(function(item) {
-      if (item[0] === "<") {
-        var subExpression = item.substr(1, item.length - 2);
-        return parsePlusSeparatedExpression(subExpression);
-      }
-      return item;
-    });
-    var total = numbers.reduce(multiplyPart);
-    function multiplyPart(total, num) {
-      return parseInt(total) * parseInt(num);
-    }
-    return total;
-  };
-
-  parseDivisionSeparatedExpression = function(expression) {
-    var numbersString = splitByParenthesesBlocks(expression, "/");
-    var numbers = numbersString.map(function(item) {
-      return parseMultiplicationSeparatedExpression(item);
-    });
-    var total = numbers.reduce(dividePart);
-    function dividePart(total, num) {
-      return parseInt(total) / parseInt(num);
-    }
-    return total;
-  };
-
-  parseMinusSeparatedExpression = function(expression) {
-    var numbersString = splitByParenthesesBlocks(expression, "-");
-    var numbers = numbersString.map(function(item) {
-      return parseDivisionSeparatedExpression(item);
-    });
-    var total = numbers.reduce(subtractPart);
-    function subtractPart(total, num) {
-      return parseInt(total) - parseInt(num);
-    }
-    return total;
-  };
-
-  parsePlusSeparatedExpression = function(expression) {
-    //debugger;
-    var numbersString = splitByParenthesesBlocks(expression, "+");
-    var numbers = numbersString.map(function(item) {
-      return parseMinusSeparatedExpression(item);
-    });
-    var total = numbers.reduce(addPart);
-    function addPart(total, num) {
-      return parseInt(total) + parseInt(num);
-    }
-    return total;
-  };
-
-  parse = function(expression) {
-    if (expression === null || expression.length === 0) {
-      return expression;
-    }
-    //known issue - remove the char '–' with '-' (hyphen is replaced with minus)
-
-    expression = expression.replace(/–/g, "-");
-    var whitespaceRemovedExpression = expression.replace(/\s/g, "");
-    return parsePlusSeparatedExpression(whitespaceRemovedExpression);
-  };
-
-  return {
-    parseArithmeticExpression: parse
-  };
-})();
-
-function valodik(){
-if (document.getElementById("t1").value.includes(document.getElementById("t3").value)) { 
-  document.getElementById("t4").value= "0";
-}}
-
-function removeSpaces(string) {
- return string.split(' ').join('');
+   }
 }
-
-function textchange5() {
-
-if (document.getElementById("new").value == "Lesson 1" && document.getElementById("new1").value == "Example 1") {
-      document.getElementById("t1").value = "programa";
-      document.getElementById("t3").value = "zrenie";
-   } 
-}
-window.onload = textchange5;
