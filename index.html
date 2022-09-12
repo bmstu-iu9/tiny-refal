@@ -4,12 +4,14 @@
       <title>New</title>
       <meta charset="utf-8"> 
       <link rel="stylesheet" href="css/style.css">
-
+ 
    </head>
    <body>
       <h1>Интерпретатор рефала</h1>
       <button style="margin-left:3px" onclick="validateText()">Запуск</button>     
       <button onclick="eraseText()">Очистить</button>
+      <button onclick="scanProgramField();scanViewField();">Лек. ан.</button>
+      <button onclick="eraseText()">Синт. ан.</button>
       <br>  
       <br>
       <button style="margin-left:3px" onclick="textchange2(); changeFunc();"> &lt;&lt;&lt;
@@ -60,6 +62,9 @@
             <br>
          </div>
       </div>
+      <p id="p"></p>
+      <br>
+      <p id="H"></p>
       <script src="js/javascript.js"></script>
       <script type="text/javascript">
       function changeFunc(){

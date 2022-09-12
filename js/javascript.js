@@ -66,36 +66,49 @@ function eraseText() {
    document.getElementById("t4").value = "";
 }
 
-function validateText() {
-   const text = document.getElementById('t1').value;
-   if ((text.match(/=/g)?.length || 0) < 2) {
-      val();
 
-   } else {
-      document.getElementById('t4').value = "Invalid";
-   }
-}
-
-function val() {
-   var someString = document.getElementById("t1").value;
-   var index = someString.indexOf("="); // Gets the first index where a space occours
-   var id = someString.substr(0, index); // Gets the first part
-   var text = someString.substr(index + 1); // Gets the text part
-
-
-   var p = document.getElementById("t3").value;
-
-
-   for (var i = 1; i <= id.length; i = i + 2) {
-      for (var j = 1; j <= text.length; j = j + 2) {
-         if (id[i] == text[j]) {
-            for (var k = 1; k <= p.length; k++) {
-               if (p[j - k] != undefined && (j - k) < k && (j - k) >= 0 && k <= (j / 2 + 0.5)) {
-
-                  document.getElementById("t4").value = document.getElementById("t4").value + p[j - k];
-               }
-            }
-         }
+function tokenize_line(line) {
+   tokens = [];
+   while (line.length > 0) {
+      if (line.at(0) == ' ') {
+         line = line.substr(1);
+      } else if (line.at(0) == '\\' && line.length >= 2) {
+         tokens[tokens.length] = line.at(1);
+         line = line.substr(2);
+      } else if ((line.at(0) == 's' || line.at(0) == 't' || line.at(0) == 'e') &&
+         line.length >= 2) {
+         tokens[tokens.length] = line.substr(0, 2);
+         line = line.substr(2);
+      } else if (line.at(0) == '#') {
+         break;
+      } else if (line.at(0) == '=') {
+         tokens[tokens.length] = '==';
+         line = line.substr(1);
+      } else {
+         tokens[tokens.length] = line.at(0);
+         line = line.substr(1);
       }
    }
+   return tokens;
+}
+
+function scanProgramField() {
+   program = document.getElementById("t1").value;
+   sentences = program.split('\n');
+   for (let i = 0; i < sentences.length; ++i) {
+      sentences[i] = tokenize_line(sentences[i]);
+      document.getElementById("p").innerHTML += sentences[i] + " ";
+   }
+
+
+}
+
+function scanViewField() {
+   program1 = document.getElementById("t3").value;
+   sentences1 = program1.split('\n');
+   for (let h = 0; h < sentences1.length; ++h) {
+      sentences1[h] = tokenize_line(sentences1[h]);
+      document.getElementById("H").innerHTML += sentences1[h] + " ";
+   }
+
 }
