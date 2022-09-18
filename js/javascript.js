@@ -60,7 +60,6 @@ function textchange4() {
 
 function eraseText() {
 
-
    document.getElementById("t2").value = "";
 
    document.getElementById("t4").value = "";
@@ -82,7 +81,7 @@ function tokenize_line(line) {
       } else if (line.at(0) == '#') {
          break;
       } else if (line.at(0) == '=') {
-         tokens[tokens.length] = '==';
+         tokens[tokens.length] = '=';
          line = line.substr(1);
       } else {
          tokens[tokens.length] = line.at(0);
@@ -115,79 +114,72 @@ function scanViewField() {
 
 function checkSentence() {
 
-   program = document.getElementById("t1").value;
-   sentences = program.split('\n');
+   var program = document.getElementById("t1").value;
+   var sentences = program.split('\n');
 
-   for (let i = 0; i < sentences.length; ++i) {
+   for (let i = 0; i < sentences.length; i++) {
       sentences[i] = tokenize_line(sentences[i]);
-      sentence = sentences[i];
+      var sentence = sentences[i];
+      var result = sentence.toString().split('=');
+      var rocketname = result[0];
+      var missionname = result[1];
       var n = 0;
       for (j = 0; j < sentence.length; j++) {
-         if (sentence[j] == "==") {
+         if (sentence[j] == "=") {
             n++;
-         if (n == 1) {
-               document.getElementById("a").innerHTML += "== OK, ";
-               var inp = program = document.getElementById("t1").value;
-               var result = inp.split("==");
-               var rocketname = result[0];
-               var missionname = result[1];
+            if (n == 1) {
+               document.getElementById("a").innerHTML += "= OK, в строчке "+[i+1]+" ";
                if (rocketname.indexOf('<') > -1 || rocketname.indexOf('>') > -1) {
-                  document.getElementById("a").innerHTML += "< или > в левой части предложения ";
-               } else {
+                  document.getElementById("a").innerHTML += "< или > в левой части предложения в строке "+[i+1]+" ";
+               }else {
                   var a = [];
                   for (let p = 0; p < rocketname.length; p++) {
                      if (rocketname[p] == "(" || rocketname[p] == ")") {
                         a.push(rocketname[p]);
                      }
                   }
-                  string = a.join("");
+                  var string = a.join("");
                   for(let o = 0; o<string.length;o++){
-                  string.replaceAll('()', '');}
+                      string = string.replaceAll('()', '');
+                  }
                   if (string == "") {
-                     document.getElementById("a").innerHTML += "Скобки сбалансированы ";
+                     document.getElementById("a").innerHTML += "Скобки сбалансированы в поле программы(левая часть пр) в строке "+[i+1]+" ";
                   } else {
-                     document.getElementById("a").innerHTML += "Лишние скобки ";
+                     document.getElementById("a").innerHTML += "Лишние скобки в поле программы (левая часть пр) в строке "+[i+1]+" ";
                   }
 
                   var b = [];
                   for (let p = 0; p < missionname.length; p++) {
-                     if (missionname[p] == "(" || missionname[p] == ")") {
+                     if (missionname[p] == "(" || missionname[p] == ")"|| missionname[p] == "<" || missionname[p] == ">") {
                         b.push(missionname[p]);
                      }
                   }
-                  string1 = b.join("");
-                  for(let o1 = 0; o1<string1.length;o1++){
-                  string1.replaceAll('()', '');}
-                  if (string1 == "") {
-                     document.getElementById("a").innerHTML += "Скобки сбалансированы ";
-                  } else {
-                     document.getElementById("a").innerHTML += "Лишние скобки ";
+                  var string1 = b.join("");
+                  for (let o1 = 0; o1 < string1.length; o1++) {
+                     string1 = string1.replaceAll('()', '');
+                     string1 = string1.replaceAll('<>', '');
                   }
-                  var c = [];
-                  for (let p = 0; p < missionname.length; p++) {
-                     if (missionname[p] == "<" || missionname[p] == ">") {
-                        c.push(missionname[p]);
-                     }
-                  }
-                  string2 = c.join("");
-                  for(let o2 = 0; o2<string2.length;o2++){
-                  string2.replaceAll('<>', '');}
-               }
-            }
-         if (n > 1) {
-            document.getElementById("a").innerHTML += " много ==, ";
-         }
-         if (n < 1) {
-            document.getElementById("a").innerHTML += " мало ==, ";
-         }
-       }
-     }
-   }
- }
 
+                  if (string1 == "") {
+                     document.getElementById("a").innerHTML += "Скобки сбалансированы в поле программы (правая часть пр) в строке "+[i+1]+" ";
+                  } else {
+                     document.getElementById("a").innerHTML += "Лишние скобки в поле программы (правая часть пр) в строке "+[i+1]+" ";
+                  }
+               } 
+            }   
+            if (n > 1) {
+            document.getElementById("a").innerHTML += " много ==, в строке "+[i+1]+" ";
+            }
+            if (n < 1) {
+            document.getElementById("a").innerHTML += " мало ==, в строке "+[i+1]+" ";
+            }
+         }
+      }
+   }
+}
 function checkViewField() {
-   program = document.getElementById("t3").value;
-   sentences = program.split('\n');
+   var program = document.getElementById("t3").value;
+   var sentences = program.split('\n');
 
    for (let i = 0; i < sentences.length; ++i) {
 
@@ -202,13 +194,14 @@ function checkViewField() {
             a.push(sentence[p]);
          }
       }
-      string = a.join("");
+      var string = a.join("");
       for(let o3 = 0; o3<string.length;o3++){
-      string.replaceAll('<>', '');}
+         string = string.replaceAll('<>', '');
+      }
       if (string == "") {
-         document.getElementById("l").innerHTML += "скобки ок ";
+         document.getElementById("l").innerHTML += "скобки ок в поле зрения сторка "+[i+1]+" ";
       } else {
-         document.getElementById("l").innerHTML += "лишние скобки ";
+         document.getElementById("l").innerHTML += "лишние скобки в поле зрения строка "+[i+1]+" ";
       }
    }
 }
