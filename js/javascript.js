@@ -90,7 +90,7 @@ function tokenize_line(line) {
          tokens[tokens.length] = line.at(1);
          line = line.substr(2);
       } else if ((line.at(0) == 's' || line.at(0) == 't' || line.at(0) == 'e') &&
-         line.length >= 2) {
+         line.length >= 2 && line.at(1) != ' ') {
          tokens[tokens.length] = line.substr(0, 2);
          line = line.substr(2);
       } else if (line.at(0) == '#') {
@@ -204,17 +204,19 @@ function match_with_variable_var(expr, expr_pos, variable, variable_pos){
 
 
 
+
+
 function match(expr, expr_pos, pattern, pattern_pos, known_vars){
    if (expr.length == expr_pos && pattern.length == pattern_pos){
       console.log('case1');
-      return {ok: true};
+      return {ok: true, __proto__: known_vars};
    }else if (pattern.length == pattern_pos){
       console.log('case2');
       return {ok: false};
    }else if(pattern[pattern_pos].length == 1){
       console.log('case3');
       if (expr[expr_pos] == pattern[pattern_pos]){
-         return match(expr, expr_pos + 1, pattern, pattern_pos + 1, known_vars);
+         return match(expr, expr_pos + 1, pattern, pattern_pos + 1, {__proto__ : known_vars});
       }else{
          return {ok: false};
       }
@@ -222,7 +224,7 @@ function match(expr, expr_pos, pattern, pattern_pos, known_vars){
       console.log('case4');
       variable = known_vars[pattern[pattern_pos]];
       if (match_with_variable_var(expr, expr_pos, variable, 0)){
-         return match(expr, expr_pos + variable.length, pattern, pattern_pos + 1, known_vars);
+         return match(expr, expr_pos + variable.length, pattern, pattern_pos + 1, {__proto__:known_vars});
       }
       return {ok :false};
    }else if (pattern[pattern_pos].length == 2 && pattern[pattern_pos][0] == 's'){
@@ -230,8 +232,9 @@ function match(expr, expr_pos, pattern, pattern_pos, known_vars){
       if (expr[expr_pos] != '(' && expr[expr_pos] != ')'){
          let variable = pattern[pattern_pos];
          let value = expr[expr_pos];
-         known_vars[variable] = value;
-         return match(expr, expr_pos + 1, pattern, pattern_pos + 1, known_vars);
+         new_vars = {__proto__: known_vars};
+         new_vars[variable] = value;
+         return match(expr, expr_pos + 1, pattern, pattern_pos + 1, new_vars);
       }else{
          return {ok : false};
       }
@@ -240,17 +243,35 @@ function match(expr, expr_pos, pattern, pattern_pos, known_vars){
       if (expr[expr_pos] != '(' && expr[expr_pos] != ')'){
          let variable = pattern[pattern_pos];
          let value = expr[expr_pos];
-         known_vars[variable] = value;
-         return match(expr, expr_pos + 1, pattern, pattern_pos + 1, known_vars);
+         new_vars = {__proto__: known_vars};
+         new_vars[variable] = value;
+         return match(expr, expr_pos + 1, pattern, pattern_pos + 1, new_vars);
       }else if (expr[expr_pos] == '('){
          let close_bracket = find_close_bracket_pos(expr, expr_pos);
          let variable = pattern[pattern_pos];
-         let value = expr.slice(expr_pos, close_bracket + 1);
-         console.log(value);
-         known_vars[variable] = value;
-         return match(expr, close_bracket + 1, pattern, pattern_pos + 1, known_vars);
+         let value = expr.slice(expr_pos, close_bracket + 1); /* из за этого запятые*/
+         new_vars = {__proto__: known_vars};
+         new_vars[variable] = value;
+         return match(expr, close_bracket + 1, pattern, pattern_pos + 1, new_vars);
       }else{
          return {ok : false};
+      }
+   }else if (pattern[pattern_pos].length == 2 && pattern[pattern_pos][0] == 'e'){
+      let end = expr_pos - 1;
+      let variable = pattern[pattern_pos];
+      let value = expr.slice (expr_pos, end + 1);
+      new_vars = {__proto__: known_vars};
+      new_vars[variable] = value;
+      let result = match(expr, end + 1, pattern, pattern_pos + 1, new_vars);
+      if (result.ok != undefined){
+         return result;
+      }else{
+         end += 1;
+         if (end == expr.len || expr[end] == ')'){
+            return {ok : false};
+         }else if (end == '('){
+            end = find_close_bracket_pos(expr, end);
+         }
       }
    }
 }
@@ -275,39 +296,76 @@ function parserDebugging() {
    }
 }
 
-function matchDebugging(){
-   eraseText();
-   let program_field = document.getElementById("t1");
-   let result_field = document.getElementById("t4");
-   let sentences = program_field.value.split('\\n');
-   for (let i = 0; i < sentences.length; i++){
-      result_field.value += '\nПредложение ' + i + ' :\n';
-      sentences[i] = tokenize_line(sentences[i]);
-      error_array = checkSentence(sentences[i]);
-      if (error_array.length != 0){
-         for (elem of error_array){
-            result_field.value += elem + '\n';
-         }
-      }else{
-         let left_part = sentences[i].slice(0, sentences[i].indexOf('=='));
-         let right_part = sentences[i].slice(sentences[i].indexOf('==') + 1);
-         result_field.value += 'левая часть: \n';
-         for (elem of left_part){
-            result_field.value += elem + '\n';
-         }
-         result_field.value += 'правая часть: \n';
-         for (elem of right_part){
-            result_field.value += elem + '\n';
-         }
-         let res = match(right_part, 0, left_part, 0, {});
-         if (res.ok){
-            result_field.value += 'OK \n';
-         }else{
-            result_field.value += 'ошибка сопоставления \n';
-         }
-      }
+function get_coords_of_leading_brackets(tokens){
+   let r_pos = 0;
+   let l_pos = 0;
+   let i = 0;
+   while (i < tokens.length && tokens[i] != '>'){
+      i++;
+   }
+   if (i == tokens.length){
+      return {ok: false};
+   }
+   r_pos = i;
+   while (tokens[i] != '<'){
+      i--;
+   }
+   l_pos = i;
+   return{ok: true, left: l_pos, right: r_pos};
+}
+
+function get_a_match_area(tokens){
+   let coords_of_leading_brackets = get_coords_of_leading_brackets(tokens);
+   if (coords_of_leading_brackets.ok == true){
+      return tokens.slice(coords_of_leading_brackets.left + 1, coords_of_leading_brackets.right);
+   }else{
+      return [];
    }
 }
+
+function matchDebugging(){
+   let program_field = document.getElementById("t1");
+   let vision_field = document.getElementById("t3");
+   let result_field = document.getElementById("t4");
+
+   let sentences = program_field.value.split('\n');
+   let expr_sentence = vision_field.value;
+
+   expr_sentence = tokenize_line(expr_sentence);
+   while (get_a_match_area(expr_sentence).length != 0){
+      result_field.value += expr_sentence + '\n';
+      expr = get_a_match_area(expr_sentence);
+      let res_of_match = {ok : false};
+      let count = 0;
+      let sentence, pattern, constructor;
+      while (res_of_match.ok == false){
+         sentence = tokenize_line(sentences[count]);
+         pattern = sentence.slice(0, sentence.indexOf('=='));
+         constructor = sentence.slice(sentence.indexOf('==') + 1);
+         res_of_match = match(expr, 0, pattern, 0, {});
+         count++;
+      }
+      // for (elem in res_of_match){
+      //    result_field.value += elem  + res_of_match[elem] + '\n';
+      // }
+      let coords_of_leading_brackets = get_coords_of_leading_brackets(expr_sentence);
+      let new_expr_sentence = expr_sentence.slice(0, coords_of_leading_brackets.left);
+      for (elem of constructor){
+         if (res_of_match[elem] != undefined){
+            for (elem1 of res_of_match[elem]){
+               new_expr_sentence.push(elem1);
+            }
+         }else{
+            new_expr_sentence.push(elem);
+         }
+      }
+      new_expr_sentence.push(...expr_sentence.slice(coords_of_leading_brackets.right + 1));
+      expr_sentence = new_expr_sentence;
+   }
+   result_field.value += expr_sentence + '\n';
+}
+
+
 
 
 function main(){
