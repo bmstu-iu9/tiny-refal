@@ -1,0 +1,81 @@
+body {
+    margin: 0;
+    background-color: #cbe2d6;
+}
+header {
+    padding: 0;
+    size: 100% 80px;
+    background: rgb(86, 86, 101);
+    background: linear-gradient(90deg, rgb(86, 86, 101) 0%, rgb(188, 188, 201) 26%,
+    rgb(98, 103, 105) 67%, rgb(129, 130, 130) 100%);
+    border-bottom: 8px solid #c9691a;
+}
+main{
+    margin-left: 5%;
+    margin-right: 5%;
+}
+.subtitle {
+    font-family: "Lucida Console", sans-serif;
+    font-size: 35px;
+    text-align: center;
+}
+img[src="refal.png"]{
+    margin: 0 auto;
+    display: flow;
+    padding-top: 15px;
+}
+.normaltext{
+    border-radius: 10px;
+    background-color: #8dcc69;
+    font-family: lucida console;
+    font-size: 22px;
+    padding: 10px;
+    border: 5px solid #688f09;
+}
+.grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 20px;
+    padding-bottom: 20px;
+}
+div[contenteditable], #result_field {
+    min-height: 200px;
+    border: 20px ridge #708b8f;
+    padding: 12px;
+    font-size: 18px;
+    font-family: consolas, sans-serif;
+    background-color: rgb(53, 51, 46);
+    color: white;
+}
+#result_field{
+    margin-left: 25%;
+    margin-right: 25%;
+    color: black;
+    background-color: white;
+}
+button{
+    width: 200px;
+    margin: 15px auto;
+    height: 60px;
+    text-align: center;
+    background-color: aquamarine;
+    border: 0;
+    font-family: arial;
+    font-size: 30px;
+    color: green;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+button:hover{
+    border: 5px solid #169a50;
+    box-shadow: 10px 5px 10px rgb(78, 78, 78);
+    transition: 100ms;
+    cursor: pointer;
+}
+button:active{
+    box-shadow: none;
+}
