@@ -1,6 +1,11 @@
 function colorWrapper(color, content) {
     return '<span style="color: rgb(' + color + ')">' + content + '</span>';
 }
+const OPEN_BRACKET_FORMATTED = colorWrapper("255, 94, 20", '(');
+const CLOSE_BRACKET_FORMATTED = colorWrapper("255, 94, 20", ')');
+const LESS_SIGN_FORMATTED = colorWrapper("193, 210, 14", "&lt;");
+const GREATER_SIGN_FORMATTED = colorWrapper("193, 210, 14", "&gt;");
+const EQUALS_SIGN_FORMATTED = colorWrapper("0, 0, 255", '=');
 document.querySelector("#program_field").addEventListener("input", (event) =>{
     if (event.data == null){
         return;
@@ -63,18 +68,18 @@ document.querySelector("#program_field").addEventListener("input", (event) =>{
                     j = var_index + colorWrapper("255, 0, 255", "").length;
 
                 } else if (text_str[i][j] == "(" && (j == 0 || text_str[i][j - 1] != "\\")) {
-                    text_str[i] = text_str[i].slice(0, j) + colorWrapper("255, 94, 20", '(') + text_str[i].slice(j + 1);
-                    j += colorWrapper("255, 94, 20", '(').length - 1;
+                    text_str[i] = text_str[i].slice(0, j) + OPEN_BRACKET_FORMATTED + text_str[i].slice(j + 1);
+                    j += OPEN_BRACKET_FORMATTED.length - 1;
                 } else if (text_str[i][j] == ")" && (j == 0 || text_str[i][j - 1] != "\\")){
-                    text_str[i] = text_str[i].slice(0, j) + colorWrapper("255, 94, 20", ')') + text_str[i].slice(j + 1);
-                    j += colorWrapper("255, 94, 20", ')').length - 1;
+                    text_str[i] = text_str[i].slice(0, j) + CLOSE_BRACKET_FORMATTED + text_str[i].slice(j + 1);
+                    j += CLOSE_BRACKET_FORMATTED.length - 1;
                 } else if (text_str[i][j] == "=" && (j == 0 || text_str[i][j - 1] != "\\")){
-                    text_str[i] = text_str[i].slice(0, j) + colorWrapper("0, 0, 255", '=') + text_str[i].slice(j + 1);
-                    j += colorWrapper("0, 0, 255", '=').length - 1;
+                    text_str[i] = text_str[i].slice(0, j) + EQUALS_SIGN_FORMATTED + text_str[i].slice(j + 1);
+                    j += EQUALS_SIGN_FORMATTED.length - 1;
                 }
             }
-        text_str[i] = text_str[i].replaceAll("&lt;", colorWrapper("193, 210, 14", "&lt;"));
-        text_str[i] = text_str[i].replaceAll("&gt;", colorWrapper("193, 210, 14", "&gt;"));
+        text_str[i] = text_str[i].replaceAll("&lt;", LESS_SIGN_FORMATTED);
+        text_str[i] = text_str[i].replaceAll("&gt;", GREATER_SIGN_FORMATTED);
     }
     let combined_str = "";
     for (let str of text_str){
@@ -153,15 +158,15 @@ document.querySelector("#view_field").addEventListener("input", (event) =>{
                 text_str[i] = text_str[i].slice(0, j) + colorWrapper("128, 128, 128", '#' + text_str[i].slice(j + 1));
                 break;
             } else if (text_str[i][j] == "(" && (j == 0 || text_str[i][j - 1] != "\\")) {
-                text_str[i] = text_str[i].slice(0, j) + colorWrapper("255, 94, 20", '(') + text_str[i].slice(j + 1);
-                j += colorWrapper("255, 94, 20", '(').length - 1;
+                text_str[i] = text_str[i].slice(0, j) + OPEN_BRACKET_FORMATTED + text_str[i].slice(j + 1);
+                j += OPEN_BRACKET_FORMATTED.length - 1;
             } else if (text_str[i][j] == ")" && (j == 0 || text_str[i][j - 1] != "\\")){
-                text_str[i] = text_str[i].slice(0, j) + colorWrapper("255, 94, 20", ')') + text_str[i].slice(j + 1);
-                j += colorWrapper("255, 94, 20", ')').length - 1;
+                text_str[i] = text_str[i].slice(0, j) + CLOSE_BRACKET_FORMATTED + text_str[i].slice(j + 1);
+                j += CLOSE_BRACKET_FORMATTED.length - 1;
             }
         }
-        text_str[i] = text_str[i].replaceAll("&lt;", colorWrapper("193, 210, 14", "&lt;"));
-        text_str[i] = text_str[i].replaceAll("&gt;", colorWrapper("193, 210, 14", "&gt;"));
+        text_str[i] = text_str[i].replaceAll("&lt;", LESS_SIGN_FORMATTED);
+        text_str[i] = text_str[i].replaceAll("&gt;", GREATER_SIGN_FORMATTED);
     }
     let combined_str = "";
     for (let str of text_str){
