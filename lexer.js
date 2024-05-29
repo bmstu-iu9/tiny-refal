@@ -158,10 +158,6 @@ document.querySelector("button").addEventListener("click", () => {
                 while (str[close_br] != ">"){
                     close_br++;
                 }
-                if (open_br + 1 == close_br){
-                    document.querySelector("#result_field").innerHTML = `Ошибка: пустые скобки активации: ${str}.`;
-                    return;
-                }
                 let expr = str.substr(open_br + 1, close_br - open_br - 1);
                 for (let pattern of tokens_program){
                     let match_obj = match(expr, 0, pattern[1], 0, {});
