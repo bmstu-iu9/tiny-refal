@@ -13,21 +13,15 @@ function scanProgramField(){
     let len = 0;
     strings = parseInput("#program_field");
     for (let [str_num, str] of Object.entries(strings)){
+        str = str.replaceAll(" ", "");
         res.push([]);
-        let var_name = "";
         for (let i = 0; i < str.length; i++){
             let symb = str[i];
             try {
                 switch (symb){
-                    case " ":
-                        if (var_name.length){
-                            res[len].push(var_name);
-                            var_name = "";
-                        }
-                        break;
                     case "\\":
-                        if (i == str.length - 1 || str[i + 1] == " ") {
-                            throw `символ \\ не задаёт escape-последовательность (строка ${Number(str_num) + 1}, столбец ${i + 1})`;
+                        if (i == str.length - 1 || !["\\", "s", "t", "e", "#", "="].includes(str[i + 1])) {
+                            throw `некорректная escape-последовательность (строка ${Number(str_num) + 1}, столбец ${i + 1})`;
                         }
                         res[len].push(str[i + 1]);
                         i++;
@@ -36,43 +30,24 @@ function scanProgramField(){
                         i = str.length;
                         break;
                     case "=":
-                        if (var_name.length){
-                            res[len].push(var_name);
-                            var_name = "";
-                        }
                         res[len].push("==");
                         break;
                     case "s":
                     case "t":
                     case "e":
-                        if (i != str.length - 1 && str[i + 1] != " " || var_name.length) {
-                            var_name += symb;
-                        } else {
-                            if (var_name.length){
-                                res[len].push(var_name);
-                                var_name = "";
-                            }
-                            res[len].push(str[i]);
+                        if (i != str.length - 1 && !["=", "<", ">", "(", ")", "#", "\\"].includes(str[i + 1])) {
+                            res[len].push(str[i] + str[i + 1]);
+                            i++;
                         }
                         break;
                     default:
-                        if (var_name.length && str[i].match("[a-zA-Z0-9]")){
-                            var_name += symb;
-                        } else {
-                            if (var_name.length){
-                                res[len].push(var_name);
-                                var_name = "";
-                            }
-                            res[len].push(symb);
-                        }
+                        res[len].push(symb);
+                        break;
                     }
             } catch (err){
                 document.querySelector("#result_field").innerHTML = "Ошибка: " + err + ".";
                 return [];
             }
-        }
-        if (var_name.length){
-            res[len].push(var_name);
         }
         if (res[len].length){
             len++;
@@ -89,17 +64,16 @@ function scanViewField() {
     let len = 0;
     strings = parseInput("#view_field");
     for (let [str_num, str] of Object.entries(strings)){
+        str = str.replaceAll(" ", "");
         res.push([]);
         let cur_str = "";
         for (let i = 0; i < str.length; i++){
             let symb = str[i];
             try {
                 switch (symb){
-                    case " ":
-                        break;
                     case "\\":
-                        if (i == str.length - 1 || str[i + 1] == " ") {
-                            throw `символ \\ не задаёт escape-последовательность (строка ${Number(str_num) + 1}, столбец ${i + 1})`;
+                        if (i == str.length - 1 || !["\\", "#"].includes(str[i + 1])) {
+                            throw `некорректная escape-последовательность (строка ${Number(str_num) + 1}, столбец ${i + 1})`;
                         }
                         cur_str += str[i + 1];
                         i++;
@@ -130,7 +104,9 @@ function scanViewField() {
 document.querySelector("button").addEventListener("click", () => {
     document.querySelector("#result_field").innerHTML = "";
     let tokens_program = scanProgramField();
+    console.log(tokens_program);
     let tokens_view = scanViewField();
+    console.log(tokens_view);
     let result_array = [];
     if (tokens_program.length && tokens_view.length){
         for (let str of tokens_view){
@@ -170,7 +146,6 @@ document.querySelector("button").addEventListener("click", () => {
                             }
                         }
                         str = str.slice(0, open_br) + expr.join("") + str.slice(close_br + 1);
-                        console.log(str);
                         result_array.push(str);
                         open_br = str.lastIndexOf("<");
                         break;

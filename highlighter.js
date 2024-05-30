@@ -57,23 +57,23 @@ document.querySelector("#program_field").addEventListener("input", (event) =>{
                 } else if (text_str[i][j] == "#" && (j == 0 || text_str[i][j - 1] != "\\")) {
                     text_str[i] = text_str[i].slice(0, j) + colorWrapper("128, 128, 128", '#' + text_str[i].slice(j + 1));
                     break;
-                } else if ((text_str[i][j] == "e" || text_str[i][j] == "s" || text_str[i][j] == "t") && j != text_str[i].length - 1
-                     && RegExp("[0-9a-zA-Z]").test(text_str[i][j + 1])) {
-                    let var_index = j;
-                    while (var_index != text_str[i].length - 1 && RegExp("[0-9a-zA-Z]").test(text_str[i][var_index + 1])) {
-                        var_index++;
+                } else if ((text_str[i][j] == "e" || text_str[i][j] == "s" || text_str[i][j] == "t") && j != text_str[i].length - 1 
+                        && (j == 0 || text_str[i][j - 1] != "\\")) {
+                    while (j != text_str[i].length - 1 && (text_str[i][j + 1] == " " || text_str[i][j + 1] == String.fromCharCode(160))) {
+                        text_str[i] = text_str[i].slice(0, j + 1) + text_str[i].slice(j + 2);
                     }
-                    text_str[i] = text_str[i].slice(0, j) + colorWrapper("255, 0, 255", text_str[i].slice(j, var_index + 1)) +
-                        text_str[i].slice(var_index + 1);
-                    j = var_index + colorWrapper("255, 0, 255", "").length;
-
-                } else if (text_str[i][j] == "(" && (j == 0 || text_str[i][j - 1] != "\\")) {
+                    if (j != text_str[i].length - 1 && !["=", "<", ">", "(", ")", "#", "\\"].includes(text_str[i][j + 1]) ) {
+                        let addedString = colorWrapper("255, 0, 255", text_str[i][j]) + "<sub>" + text_str[i][j + 1] + "</sub>";
+                        text_str[i] = text_str[i].slice(0, j) + addedString + text_str[i].slice(j + 2);
+                        j += addedString.length - 1;
+                    }
+                } else if (text_str[i][j] == "(") {
                     text_str[i] = text_str[i].slice(0, j) + OPEN_BRACKET_FORMATTED + text_str[i].slice(j + 1);
                     j += OPEN_BRACKET_FORMATTED.length - 1;
-                } else if (text_str[i][j] == ")" && (j == 0 || text_str[i][j - 1] != "\\")){
+                } else if (text_str[i][j] == ")"){
                     text_str[i] = text_str[i].slice(0, j) + CLOSE_BRACKET_FORMATTED + text_str[i].slice(j + 1);
                     j += CLOSE_BRACKET_FORMATTED.length - 1;
-                } else if (text_str[i][j] == "=" && (j == 0 || text_str[i][j - 1] != "\\")){
+                } else if (text_str[i][j] == "="){
                     text_str[i] = text_str[i].slice(0, j) + EQUALS_SIGN_FORMATTED + text_str[i].slice(j + 1);
                     j += EQUALS_SIGN_FORMATTED.length - 1;
                 }
@@ -157,10 +157,10 @@ document.querySelector("#view_field").addEventListener("input", (event) =>{
             } else if (text_str[i][j] == "#" && (j == 0 || text_str[i][j - 1] != "\\")) {
                 text_str[i] = text_str[i].slice(0, j) + colorWrapper("128, 128, 128", '#' + text_str[i].slice(j + 1));
                 break;
-            } else if (text_str[i][j] == "(" && (j == 0 || text_str[i][j - 1] != "\\")) {
+            } else if (text_str[i][j] == "(") {
                 text_str[i] = text_str[i].slice(0, j) + OPEN_BRACKET_FORMATTED + text_str[i].slice(j + 1);
                 j += OPEN_BRACKET_FORMATTED.length - 1;
-            } else if (text_str[i][j] == ")" && (j == 0 || text_str[i][j - 1] != "\\")){
+            } else if (text_str[i][j] == ")"){
                 text_str[i] = text_str[i].slice(0, j) + CLOSE_BRACKET_FORMATTED + text_str[i].slice(j + 1);
                 j += CLOSE_BRACKET_FORMATTED.length - 1;
             }
