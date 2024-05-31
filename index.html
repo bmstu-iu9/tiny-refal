@@ -1,73 +1,40 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <title>New</title>
-      <meta charset="utf-8"> 
-      <link rel="stylesheet" href="css/style.css">
- 
-   </head>
-   <body>
-      <h1>Интерпретатор рефала</h1>
-      <button style="margin-left:3px">Запуск</button>     
-      <button>Очистить</button>
-      <button id = "lexan" type = "submit">Лек. ан.</button>
-      <button id = "syntan" type = "submit">Синт. ан.</button>
-      <button id = "match" type = "submit">Сопоставить</button>
-      <br>  
-      <br>
-      <button style="margin-left:3px"> &lt;&lt;&lt;
-      </button>
-      <label for="">Выберите урок:</label>
-      <select id="new">
-         <option value=""></option>
-         <option value="Lesson 1">Урок 1</option>
-         <option value="Lesson 2">Урок 2</option>
-         <option value="Lesson 3">Урок 3</option>
-         <option value="Lesson 4">Урок 4</option>
-      </select>
-      <button style="margin-right:25px">&gt;&gt;&gt;</button>
-      <button style="margin-left:28px">&lt;&lt;&lt;   
-      </button>
-      <label for="">Выберите пример:</label>
-      <select id="new1">
-         <option value=""></option>
-         <option value="Example 1">Пример 1 </option>
-         <option value="Example 2">Пример 2</option>
-         <option value="Example 3">Пример 3</option>
-         <option value="Example 4">Пример 4</option>
-      </select>
-      <button> &gt;&gt;&gt; </button>
-      <br>
-      <br>
-      <div class="row" style="
-         height: 425px;">
-         <div class="col">
-            <textarea id="t1" placeholder="Поле программы" style="
-               width: 300px;
-               height: 200px;
-               margin-right: 10px;" ></textarea>
-            <br>
-            <textarea id="t2" placeholder="Детализированное поле программы" style="
-               width: 300px;
-               height: 200px;"></textarea>
-            <br>
-         </div>
-         <div class="col">
-            <textarea id="t3" placeholder="Поле зрения" style="
-               width: 300px;
-               height: 200px;"></textarea>
-            <br>
-            <textarea id="t4" placeholder="Поле результата" style="
-               width: 300px;
-               height: 200px;"></textarea>
-            <br>
-         </div>
-      </div>
-      <p id="p"></p>
-      <br>
-      <p id="H"></p>
-      <script src="js/javascript.js"></script>
-      <script type="text/javascript">
-      </script>
-   </body>
-</html> 
+    <head>
+        <meta charset="UTF-8" lang="ru">
+        <link href="style.css" rel="stylesheet">
+        <title>Tiny Refal - простой интерпретатор Рефала</title>
+    </head>
+    <body>
+        <header>
+            <img src="refal.png" alt="Tiny Refal" width="35%" height="35%">
+            <p class="subtitle">Легковесный интерпретатор Рефала</p>
+        </header>
+        <main>
+            <p class="normaltext">Это простой и легковесный интерпретатор
+                функционального языка программирования Рефал. РЕФАЛ — язык функционального программирования, 
+                ориентированный на обработку символьных данных: анализ компьютерных программ, 
+                трансляция, обработка текста на естественных и искусственных языках. Основными операциями
+                в Рефале являются сопоставление с образцом и рекурсивный вызов.
+            </p>
+            <button type="button">Выполнить</button>
+            <div class="grid">
+                <div spellcheck="false" contenteditable="true" id="program_field"><div>Поле программы</div></div>
+                <div spellcheck="false" contenteditable="true" id="view_field"><div>Поле зрения</div></div>
+            </div>
+            <div id="result_field">Поле результата</div>
+            <p class="normaltext">Данный интерпретатор реализует минималистичный диалект Рефала под названием
+                "Крошечный Рефал" (Tiny Refal). Многих элементов классического Рефала в нём нет,
+                но он в полной мере демонстрирует основные идеи Рефала.
+                Выражения могут содержать два типа скобок, которые всегда должны быть сбалансированы и правильно вложены:
+                <br> - структурные скобки — круглые скобки (...), служат для структурирования данных;
+                <br> - скобки конкретизации (скобки активации) — угловые скобки &lt;...&gt;, служат для выделения участков выражения, подлежащих дальнейшим преобразованиям.
+                <br> Работа программы заключается в сопоставлении каждому выражению внутри скобок активации преобразованного выражения, определяемого полем программы.
+            </p>
+        </main>
+        <script src="lexer.js"></script>
+        <script src="parser.js"></script>
+        <script src="match.js"></script>
+        <script src="highlighter.js"></script>
+    </body>
+</html>
