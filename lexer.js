@@ -101,8 +101,9 @@ function scanViewField() {
     return res;
 }
 
-document.querySelector("button").addEventListener("click", () => {
-    document.querySelector("#result_field").innerHTML = "";
+function *executeProgram() {
+    const MAX_STEPS = 30;
+    //document.querySelector("#result_field").innerHTML = "";
     let tokens_program = scanProgramField();
     console.log(tokens_program);
     let tokens_view = scanViewField();
@@ -113,14 +114,14 @@ document.querySelector("button").addEventListener("click", () => {
             let parse_res = parseBrackets(str);
             if (parse_res.length){
                 document.querySelector("#result_field").innerHTML = `Ошибка: ${parse_res}.`;
-                return;
+                return [];
             }
         }
         for (let [key, sent] of Object.entries(tokens_program)){
             let parse_res = parseSentence(sent);
             if (parse_res.length){
                 document.querySelector("#result_field").innerHTML = `Ошибка: ${parse_res}.`;
-                return;
+                return [];
             }
             tokens_program[key] = split_sentence;
         }
@@ -147,6 +148,10 @@ document.querySelector("button").addEventListener("click", () => {
                         }
                         str = str.slice(0, open_br) + expr.join("") + str.slice(close_br + 1);
                         result_array.push(str);
+                        if (result_array.length == MAX_STEPS) {
+                            yield result_array;
+                            result_array = [];
+                        }
                         open_br = str.lastIndexOf("<");
                         break;
                     }
@@ -155,15 +160,33 @@ document.querySelector("button").addEventListener("click", () => {
             }
             if (!matched){
                 document.querySelector("#result_field").innerHTML = `Ошибка: скобки активации не соотвествуют ни одному из образцов: ${str}.`;
-                return;
+                return [];
             }
             tokens_view[key] = str;
         }
-        let total_string = "";
-        for (let str2 of result_array){
-            str2 = str2.replaceAll("<", "&lt;")
-            total_string += str2.replaceAll("<", "&gt;") + "<br>";
-        }
-        document.querySelector("#result_field").innerHTML = total_string;
     }
+    return result_array;
+}
+
+document.querySelector("button").addEventListener("click", () => {
+    let prog = executeProgram();
+    let total_string = "";
+    let exec = () => {
+        if (document.querySelector("a")) {
+            total_string = total_string.slice(0, total_string.length - "<a style='color: blue'>Продолжить</a><br>".length);
+        }
+        let result = prog.next();
+        if (result.value.length) {
+            for (let str2 of result.value){
+                str2 = str2.replaceAll("<", "&lt;")
+                total_string += str2.replaceAll(">", "&gt;") + "<br>";
+            }
+            if (!result.done) {
+                total_string += "<a style='color: blue'>Продолжить</a><br>";
+            }
+            document.querySelector("#result_field").innerHTML = total_string;
+            document.querySelector("a")?.addEventListener("click", exec);
+        }
+    }
+    exec();
 });
