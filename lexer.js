@@ -179,7 +179,7 @@ document.querySelector("button").addEventListener("click", () => {
         if (result.value.length) {
             for (let str2 of result.value){
                 str2 = str2.replaceAll("<", "&lt;")
-                total_string += str2.replaceAll("<", "&gt;") + "<br>";
+                total_string += str2.replaceAll(">", "&gt;") + "<br>";
             }
             if (!result.done) {
                 total_string += "<a style='color: blue'>Продолжить</a><br>";
