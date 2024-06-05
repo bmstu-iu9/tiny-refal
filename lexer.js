@@ -45,7 +45,7 @@ function scanProgramField(){
                         break;
                     }
             } catch (err){
-                document.querySelector("#result_field").innerHTML = "Ошибка: " + err + ".";
+                document.querySelector("#result_field").innerHTML = "<span style='color: red'>Ошибка: " + err + ".</span>";
                 return [];
             }
         }
@@ -86,7 +86,7 @@ function scanViewField() {
                         cur_str += symb;
                     }
             } catch (err){
-                document.querySelector("#result_field").innerHTML = "Ошибка: " + err + ".";
+                document.querySelector("#result_field").innerHTML = "<span style='color: red'>Ошибка: " + err + ".</span>";
                 return [];
             }
         }
@@ -103,37 +103,35 @@ function scanViewField() {
 
 function *executeProgram() {
     const MAX_STEPS = 30;
-    //document.querySelector("#result_field").innerHTML = "";
     let tokens_program = scanProgramField();
-    console.log(tokens_program);
     let tokens_view = scanViewField();
-    console.log(tokens_view);
     let result_array = [];
     if (tokens_program.length && tokens_view.length){
         for (let str of tokens_view){
             let parse_res = parseBrackets(str);
             if (parse_res.length){
-                document.querySelector("#result_field").innerHTML = `Ошибка: ${parse_res}.`;
-                return [];
+                result_array.push(`<span style='color: red'>Ошибка: ${parse_res}.</span>`)
+                return result_array;
             }
         }
         for (let [key, sent] of Object.entries(tokens_program)){
             let parse_res = parseSentence(sent);
             if (parse_res.length){
-                document.querySelector("#result_field").innerHTML = `Ошибка: ${parse_res}.`;
-                return [];
+                result_array.push(`<span style='color: red'>Ошибка: ${parse_res}.</span>`)
+                return result_array;
             }
             tokens_program[key] = split_sentence;
         }
         for (let [key, str] of Object.entries(tokens_view)){
-            result_array.push(str);
+            let str_mod = str.replaceAll("<", "&lt;");
+            result_array.push(str_mod.replaceAll(">", "&gt;"));
             let matched = true;
-            let open_br = str.lastIndexOf("<");
-            while (open_br != -1 && matched){
+            let close_br = str.indexOf(">");
+            while (close_br != -1 && matched){
                 matched = false;
-                let close_br = open_br;
-                while (str[close_br] != ">"){
-                    close_br++;
+                let open_br = close_br;
+                while (str[open_br] != "<"){
+                    open_br--;
                 }
                 let expr = str.substr(open_br + 1, close_br - open_br - 1);
                 for (let pattern of tokens_program){
@@ -147,20 +145,21 @@ function *executeProgram() {
                             }
                         }
                         str = str.slice(0, open_br) + expr.join("") + str.slice(close_br + 1);
-                        result_array.push(str);
+                        let str_mod = str.replaceAll("<", "&lt;");
+                        result_array.push(str_mod.replaceAll(">", "&gt;"));
                         if (result_array.length == MAX_STEPS) {
                             yield result_array;
                             result_array = [];
                         }
-                        open_br = str.lastIndexOf("<");
+                        close_br = str.indexOf(">");
                         break;
                     }
                 }
-                open_br = str.lastIndexOf("<");
+                close_br = str.indexOf(">");
             }
             if (!matched){
-                document.querySelector("#result_field").innerHTML = `Ошибка: скобки активации не соотвествуют ни одному из образцов: ${str}.`;
-                return [];
+                result_array.push(`<span style='color: red'>Ошибка: скобки активации не соотвествуют ни одному из образцов.</span>`)
+                return result_array;
             }
             tokens_view[key] = str;
         }
@@ -178,8 +177,7 @@ document.querySelector("button").addEventListener("click", () => {
         let result = prog.next();
         if (result.value.length) {
             for (let str2 of result.value){
-                str2 = str2.replaceAll("<", "&lt;")
-                total_string += str2.replaceAll(">", "&gt;") + "<br>";
+                total_string += str2 + "<br>";
             }
             if (!result.done) {
                 total_string += "<a style='color: blue'>Продолжить</a><br>";
