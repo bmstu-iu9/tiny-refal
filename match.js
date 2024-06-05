@@ -1,5 +1,10 @@
 function match(expr, expr_pos, pattern, pattern_pos, vars){
-    while (pattern_pos != pattern.length && expr_pos != expr.length){
+    // console.log("expr: ", expr);
+    // console.log("expr_pos: ", expr_pos);
+    // console.log("expr_pos: ", pattern);
+    // console.log("pattern_pos: ", pattern_pos);
+    // console.log("vars: ", vars);
+    while (pattern_pos != pattern.length && (expr_pos != expr.length || pattern[pattern_pos][0] == "e" && !expr.slice(expr_pos).length)){
         if (pattern[pattern_pos].length == 1){
             if (expr[expr_pos] == pattern[pattern_pos]){
                 pattern_pos++;
@@ -27,8 +32,15 @@ function match(expr, expr_pos, pattern, pattern_pos, vars){
                 return {ok: false};
             } else if (expr[expr_pos] == "("){
                 let close_bracket = expr_pos;
-                while (expr[close_bracket] != ")"){
+                let bracket_counter = 1;
+                while (bracket_counter > 0){
                     close_bracket++;
+                    if (expr[close_bracket] == "("){
+                        bracket_counter++;
+                    }
+                    else if (expr[close_bracket] == ")"){
+                        bracket_counter--;
+                    }
                 }
                 return match(expr, close_bracket + 1, pattern, pattern_pos + 1, {
                     [pattern[pattern_pos]]: expr.substr(expr_pos, close_bracket - expr_pos + 1),
@@ -41,10 +53,17 @@ function match(expr, expr_pos, pattern, pattern_pos, vars){
             });
         } else {
             let end = expr_pos - 1;
-            while (end != expr.length && expr[end] != ")"){
+            while (end != expr.length && expr[expr_pos] != ")"){
                 if (expr[end] == "("){
-                    while (expr[end] != ")"){
+                    let bracket_counter = 1;
+                    while (bracket_counter > 0){
                         end++;
+                        if (expr[end] == "(") {
+                            bracket_counter++;
+                        }
+                        else if (expr[end] == ")") {
+                            bracket_counter--;
+                        }
                     }
                 }
                 let res = match(expr, end + 1, pattern, pattern_pos + 1, {
