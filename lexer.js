@@ -158,7 +158,7 @@ function *executeProgram() {
                 close_br = str.indexOf(">");
             }
             if (!matched){
-                result_array.push(`<span style='color: red'>Ошибка: скобки активации не соотвествуют ни одному из образцов.</span>`)
+                result_array.push(`<span style='color: red'>Ошибка: скобки активации не соответствуют ни одному из образцов.</span>`)
                 return result_array;
             }
             tokens_view[key] = str;

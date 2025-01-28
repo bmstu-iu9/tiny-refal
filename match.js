@@ -1,9 +1,4 @@
 function match(expr, expr_pos, pattern, pattern_pos, vars){
-    // console.log("expr: ", expr);
-    // console.log("expr_pos: ", expr_pos);
-    // console.log("expr_pos: ", pattern);
-    // console.log("pattern_pos: ", pattern_pos);
-    // console.log("vars: ", vars);
     while (pattern_pos != pattern.length && (expr_pos != expr.length || pattern[pattern_pos][0] == "e" && !expr.slice(expr_pos).length)){
         if (pattern[pattern_pos].length == 1){
             if (expr[expr_pos] == pattern[pattern_pos]){
@@ -53,7 +48,18 @@ function match(expr, expr_pos, pattern, pattern_pos, vars){
             });
         } else {
             let end = expr_pos - 1;
-            while (end != expr.length && expr[expr_pos] != ")"){
+            while (end != expr.length){
+                let res = match(expr, end + 1, pattern, pattern_pos + 1, {
+                    [pattern[pattern_pos]]: expr.substr(expr_pos, end - expr_pos + 1),
+                    __proto__: vars
+                })
+                if (res.ok){
+                    return res;
+                }
+                end++;
+                if (end == expr.length && expr[expr_pos] == ")") {
+                    break;
+                }
                 if (expr[end] == "("){
                     let bracket_counter = 1;
                     while (bracket_counter > 0){
@@ -66,14 +72,6 @@ function match(expr, expr_pos, pattern, pattern_pos, vars){
                         }
                     }
                 }
-                let res = match(expr, end + 1, pattern, pattern_pos + 1, {
-                    [pattern[pattern_pos]]: expr.substr(expr_pos, end - expr_pos + 1),
-                    __proto__: vars
-                })
-                if (res.ok){
-                    return res;
-                }
-                end++;
             }
             return {ok: false};
         }
